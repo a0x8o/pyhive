@@ -1,0 +1,16 @@
+cover/
+.coverage
+/dist/
+.DS_Store
+*.egg
+/env/
+/htmlcov/
+.idea/
+.project
+*.pyc
+.pydevproject
+/PyHive.egg-info/
+.settings
+.cache/
+*.iml
+/scripts/.thrift_gen
