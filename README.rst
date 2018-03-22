@@ -69,7 +69,11 @@ Passing session configuration
     hive.connect('localhost', configuration={'hive.exec.reducers.max': '123'})
     presto.connect('localhost', session_props={'query_max_run_time': '1234m'})
     # SQLAlchemy
-    create_engine('presto://user@host:443/hive', connect_args={'protocol': 'https'})
+    create_engine(
+        'presto://user@host:443/hive',
+        connect_args={'protocol': 'https',
+                      'session_props': {'query_max_run_time': '1234m'}}
+    )
     create_engine(
         'hive://user@host:10000/database',
         connect_args={'configuration': {'hive.exec.reducers.max': '123'}},
@@ -88,13 +92,14 @@ Install using
 - ``pip install pyhive[hive]`` for the Hive interface and
 - ``pip install pyhive[presto]`` for the Presto interface.
 
-`PyHive` works with
+PyHive works with
 
 - Python 2.7 / Python 3
 - For Presto: Presto install
 - For Hive: `HiveServer2 <https://cwiki.apache.org/confluence/display/Hive/Setting+up+HiveServer2>`_ daemon
-
-There's also a `third party Conda package <https://binstar.org/blaze/pyhive>`_.
+- For Python 3 + Hive + SASL, you currently need to install an unreleased version of ``thrift_sasl``
+  (``pip install git+https://github.com/cloudera/thrift_sasl``).
+  At the time of writing, the latest version of ``thrift_sasl`` was 0.2.1.
 
 Changelog
 =========
@@ -104,6 +109,12 @@ Contributing
 ============
 - Please fill out the Dropbox Contributor License Agreement at https://opensource.dropbox.com/cla/ and note this in your pull request.
 - Changes must come with tests, with the exception of trivial things like fixing comments. See .travis.yml for the test environment setup.
+- Notes on project scope:
+
+  - This project is intended to be a minimal Hive/Presto client that does that one thing and nothing else.
+    Features that can be implemented on top of PyHive, such integration with your favorite data analysis library, are likely out of scope.
+  - We prefer having a small number of generic features over a large number of specialized, inflexible features.
+    For example, the Presto code takes an arbitrary ``requests_session`` argument for customizing HTTP calls, as opposed to having a separate parameter/branch for each ``requests`` option.
 
 Testing
 =======
